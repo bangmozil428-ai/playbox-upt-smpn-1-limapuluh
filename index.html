@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PLAY BOX — Request Lagu</title>
+<style>
+  /* ===== 16 TEMA ===== */
+  body[data-theme="default"] {
+    --bg-grad: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #6a3093 100%);
+    --card-bg: rgba(255,255,255,0.95); --card-text: #2c3e50;
+    --label: #4a3f8f; --input-bg: #fff; --input-border: #dfe6e9;
+    --header-bg: rgba(255,255,255,0.1); --accent: #667eea;
+  }
+  body[data-theme="neon"] {
+    --bg-grad: linear-gradient(135deg, #0a0a0a 0%, #111 50%, #0a1a1a 100%);
+    --card-bg: rgba(15,25,25,0.95); --card-text: #d0ffe0;
+    --label: #00ffcc; --input-bg: #0a1515; --input-border: #1a4a3a;
+    --header-bg: rgba(0,255,204,0.08); --accent: #00ffcc;
+  }
+  body[data-theme="retro"] {
+    --bg-grad: linear-gradient(135deg, #f4a261 0%, #e76f51 50%, #6b4226 100%);
+    --card-bg: rgba(255,245,230,0.95); --card-text: #4a2c17;
+    --label: #6b4226; --input-bg: #fff5e6; --input-border: #d4a574;
+    --header-bg: rgba(255,255,255,0.15); --accent: #e76f51;
+  }
+  body[data-theme="sunset"] {
+    --bg-grad: linear-gradient(135deg, #ff512f 0%, #c62368 50%, #dd2476 100%);
+    --card-bg: rgba(255,240,245,0.95); --card-text: #4a1a2a;
+    --label: #c62368; --input-bg: #fff; --input-border: #f0c0d0;
+    --header-bg: rgba(255,255,255,0.12); --accent: #ff512f;
+  }
+  body[data-theme="ocean"] {
+    --bg-grad: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+    --card-bg: rgba(240,250,255,0.95); --card-text: #1a3040;
+    --label: #2c5364; --input-bg: #fff; --input-border: #b0d0e0;
+    --header-bg: rgba(255,255,255,0.08); --accent: #2c5364;
+  }
+  body[data-theme="forest"] {
+    --bg-grad: linear-gradient(135deg, #134e5e 0%, #2d7a4a 50%, #71b280 100%);
+    --card-bg: rgba(240,255,245,0.95); --card-text: #1a3a2a;
+    --label: #2d7a4a; --input-bg: #fff; --input-border: #b0e0c0;
+    --header-bg: rgba(255,255,255,0.1); --accent: #2d7a4a;
+  }
+  body[data-theme="candy"] {
+    --bg-grad: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 50%, #ff9a9e 100%);
+    --card-bg: rgba(255,250,252,0.95); --card-text: #6a2a4a;
+    --label: #e06090; --input-bg: #fff; --input-border: #ffd0e0;
+    --header-bg: rgba(255,255,255,0.25); --accent: #e06090;
+  }
+  body[data-theme="midnight"] {
+    --bg-grad: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+    --card-bg: rgba(20,20,45,0.95); --card-text: #d0d0ff;
+    --label: #a0a0f0; --input-bg: #1a1a3a; --input-border: #3a3a6a;
+    --header-bg: rgba(255,255,255,0.05); --accent: #7a7af0;
+  }
+  body[data-theme="lava"] {
+    --bg-grad: linear-gradient(135deg, #200122 0%, #6f0000 50%, #200122 100%);
+    --card-bg: rgba(40,10,10,0.95); --card-text: #ffd0c0;
+    --label: #ff5533; --input-bg: #2a0a0a; --input-border: #6a2a2a;
+    --header-bg: rgba(255,80,50,0.1); --accent: #ff5533;
+  }
+  body[data-theme="sky"] {
+    --bg-grad: linear-gradient(135deg, #56ccf2 0%, #2f80ed 50%, #56ccf2 100%);
+    --card-bg: rgba(245,250,255,0.95); --card-text: #1a3a5a;
+    --label: #2f80ed; --input-bg: #fff; --input-border: #b0d0f0;
+    --header-bg: rgba(255,255,255,0.2); --accent: #2f80ed;
+  }
+  body[data-theme="coffee"] {
+    --bg-grad: linear-gradient(135deg, #3e2723 0%, #6d4c41 50%, #a1887f 100%);
+    --card-bg: rgba(255,248,240,0.95); --card-text: #3e2723;
+    --label: #6d4c41; --input-bg: #fff8f0; --input-border: #d7c0a8;
+    --header-bg: rgba(255,255,255,0.12); --accent: #6d4c41;
+  }
+  body[data-theme="galaxy"] {
+    --bg-grad: linear-gradient(135deg, #20002c 0%, #4a00e0 50%, #2d1b4e 100%);
+    --card-bg: rgba(25,15,45,0.95); --card-text: #e0d0ff;
+    --label: #a070ff; --input-bg: #1a0a2e; --input-border: #3a2a5a;
+    --header-bg: rgba(160,112,255,0.08); --accent: #a070ff;
+  }
+  body[data-theme="sakura"] {
+    --bg-grad: linear-gradient(135deg, #ffd0e0 0%, #ffb0d0 50%, #ff90c0 100%);
+    --card-bg: rgba(255,248,252,0.95); --card-text: #5a2a4a;
+    --label: #e060a0; --input-bg: #fff; --input-border: #ffc0e0;
+    --header-bg: rgba(255,255,255,0.25); --accent: #e060a0;
+  }
+  body[data-theme="monochrome"] {
+    --bg-grad: linear-gradient(135deg, #1a1a1a 0%, #4a4a4a 50%, #1a1a1a 100%);
+    --card-bg: rgba(240,240,240,0.95); --card-text: #1a1a1a;
+    --label: #333; --input-bg: #fff; --input-border: #c0c0c0;
+    --header-bg: rgba(255,255,255,0.08); --accent: #555;
+  }
+  body[data-theme="cyberpunk"] {
+    --bg-grad: linear-gradient(135deg, #0a0014 0%, #2a0044 50%, #0a0014 100%);
+    --card-bg: rgba(20,5,35,0.95); --card-text: #e0d0ff;
+    --label: #ff00aa; --input-bg: #150525; --input-border: #4a1a6a;
+    --header-bg: rgba(255,0,170,0.1); --accent: #ff00aa;
+  }
+  body[data-theme="pastel"] {
+    --bg-grad: linear-gradient(135deg, #a8edea 0%, #fed6e3 50%, #c4e0f9 100%);
+    --card-bg: rgba(255,255,255,0.9); --card-text: #3a3a5a;
+    --label: #6a6aaa; --input-bg: #fff; --input-border: #d0d0f0;
+    --header-bg: rgba(255,255,255,0.3); --accent: #8a8ae0;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--bg-grad); min-height: 100vh; color: #fff; padding: 20px; position: relative; overflow-x: hidden; transition: background 0.6s; }
+  body::before { content: ''; position: fixed; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 70%); animation: rotate 30s linear infinite; z-index: -1; }
+  @keyframes rotate { to { transform: rotate(360deg); } }
+
+  .top-controls { position: fixed; top: 16px; right: 16px; display: flex; gap: 10px; z-index: 100; }
+  .icon-btn { width: 48px; height: 48px; border-radius: 50%; background: rgba(255,255,255,0.15); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.3); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s; color: #fff; }
+  .icon-btn:hover { background: rgba(255,255,255,0.3); transform: scale(1.1) rotate(15deg); }
+
+  .container { max-width: 640px; margin: 0 auto; position: relative; z-index: 1; }
+
+  /* ===== HEADER DENGAN LOGO ===== */
+  header { text-align: center; padding: 25px 20px; background: var(--header-bg); backdrop-filter: blur(10px); border-radius: 20px; border: 1px solid rgba(255,255,255,0.2); margin-bottom: 20px; box-shadow: 0 8px 32px rgba(0,0,0,0.3); transition: background 0.4s; display: flex; flex-direction: column; align-items: center; }
+  
+  .header-logo { width: 80px; height: 80px; object-fit: contain; border-radius: 50%; background: #fff; padding: 4px; margin-bottom: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); animation: pulseLogo 3s infinite; }
+  @keyframes pulseLogo { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+
+  header h1 { font-size: 1.7em; background: linear-gradient(90deg, #ffd89b, #c7e9fb, #ffd89b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 8px; font-weight: 800; letter-spacing: 1px; }
+  header p.sub { color: #c7e9fb; font-size: 0.9em; }
+
+  .equalizer { display: inline-flex; gap: 3px; align-items: flex-end; height: 20px; margin-left: 10px; vertical-align: middle; }
+  .equalizer span { width: 3px; background: var(--accent); animation: eq 0.6s ease-in-out infinite alternate; }
+  .equalizer span:nth-child(1){ animation-delay: 0s; height: 8px; } .equalizer span:nth-child(2){ animation-delay: 0.15s; height: 14px; } .equalizer span:nth-child(3){ animation-delay: 0.3s; height: 10px; } .equalizer span:nth-child(4){ animation-delay: 0.45s; height: 16px; } .equalizer span:nth-child(5){ animation-delay: 0.6s; height: 12px; }
+  @keyframes eq { to { height: 20px; opacity: 0.6; } }
+
+  .card { background: var(--card-bg); color: var(--card-text); border-radius: 20px; padding: 28px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); animation: fadeIn 0.5s; transition: background 0.4s, color 0.4s; }
+  @keyframes fadeIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+  .card h2 { color: var(--label); margin-bottom: 15px; font-size: 1.3em; display: flex; align-items: center; gap: 10px; }
+  .alert { background: linear-gradient(135deg, #ffeaa7, #fdcb6e); padding: 13px; border-radius: 12px; margin-bottom: 18px; border-left: 5px solid #e17055; font-size: 0.88em; color: #6c5b2a; line-height: 1.5; }
+  .alert strong { color: #d63031; }
+  .galau-warning { background: rgba(214,48,49,0.1); border: 1px solid rgba(214,48,49,0.35); color: #d63031; padding: 10px 14px; border-radius: 10px; font-size: 0.82em; margin-bottom: 14px; line-height: 1.5; display: none; }
+  .galau-warning.show { display: block; animation: fadeIn 0.4s; }
+
+  .form-group { margin-bottom: 16px; }
+  .form-group label { display: block; margin-bottom: 6px; font-weight: 600; color: var(--label); font-size: 0.92em; }
+  .form-group .optional { font-weight: 400; color: #95a5a6; font-size: 0.82em; font-style: italic; }
+  .input-row { display: flex; gap: 8px; align-items: stretch; }
+  .input-row input { flex: 1; }
+  .btn-yt { padding: 0 14px; background: #ff0000; color: #fff; border: none; border-radius: 12px; cursor: pointer; font-size: 0.85em; font-weight: 700; white-space: nowrap; transition: all 0.3s; }
+  .btn-yt:hover { background: #cc0000; transform: scale(1.05); }
+  .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 11px 14px; border: 2px solid var(--input-border); border-radius: 12px; font-size: 0.94em; font-family: inherit; transition: all 0.3s; background: var(--input-bg); color: var(--card-text); }
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 20%, transparent); }
+
+  /* PANEL LAGU */
+  .lagu-panel { max-height: 280px; overflow-y: auto; background: var(--input-bg); border: 2px solid var(--input-border); border-radius: 12px; margin-top: 8px; display: none; }
+  .lagu-panel.show { display: block; }
+  .lagu-panel .lagu-item { padding: 10px 14px; cursor: pointer; border-bottom: 1px solid var(--input-border); transition: background 0.2s; font-size: 0.9em; }
+  .lagu-panel .lagu-item:last-child { border-bottom: none; }
+  .lagu-panel .lagu-item:hover { background: color-mix(in srgb, var(--accent) 15%, transparent); }
+  .lagu-panel .lagu-item .judul { font-weight: 600; color: var(--card-text); }
+  .lagu-panel .lagu-item .penyanyi { font-size: 0.82em; color: #95a5a6; margin-top: 2px; }
+  .lagu-panel .lagu-empty { padding: 14px; text-align: center; color: #95a5a6; font-size: 0.85em; }
+
+  /* FOTO */
+  .foto-box { border: 2px dashed var(--input-border); border-radius: 12px; padding: 18px; text-align: center; cursor: pointer; transition: all 0.3s; background: var(--input-bg); }
+  .foto-box:hover { border-color: var(--accent); }
+  .foto-box small { display: block; color: #95a5a6; margin-top: 5px; font-size: 0.78em; }
+  .foto-preview { margin-top: 10px; text-align: center; display: none; }
+  .foto-preview.show { display: block; }
+  .foto-preview img { max-width: 140px; max-height: 140px; border-radius: 12px; border: 2px solid var(--accent); object-fit: cover; }
+  .foto-preview button { display: block; margin: 8px auto 0; background: #e17055; color: #fff; border: none; padding: 6px 14px; border-radius: 8px; cursor: pointer; font-size: 0.82em; }
+
+  .btn-submit { width: 100%; padding: 14px; border: none; border-radius: 12px; background: linear-gradient(135deg, var(--accent), var(--label)); color: #fff; font-size: 1em; font-weight: 700; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: 0 5px 20px color-mix(in srgb, var(--accent) 40%, transparent); }
+  .btn-submit:hover { transform: translateY(-2px); }
+  .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+  /* SUKSES */
+  .success-page { display: none; text-align: center; padding: 15px; }
+  .success-page.show { display: block; animation: fadeIn 0.6s; }
+  .success-icon { width: 85px; height: 85px; margin: 0 auto 18px; background: linear-gradient(135deg, #00b894, #00cec9); border-radius: 50%; display: flex; align-items: center; justify-content: center; animation: bounceIn 0.6s; }
+  @keyframes bounceIn { 0%{transform:scale(0)} 50%{transform:scale(1.15)} 100%{transform:scale(1)} }
+  .success-page h2 { color: #00b894; font-size: 1.4em; margin-bottom: 10px; }
+  .success-page p { color: var(--card-text); margin-bottom: 18px; font-size: 0.92em; }
+  .kode-box { background: linear-gradient(135deg, var(--accent), var(--label)); color: #fff; padding: 18px; border-radius: 15px; margin: 18px 0; }
+  .kode-box .label { font-size: 0.78em; opacity: 0.85; margin-bottom: 6px; letter-spacing: 1px; }
+  .kode-box .kode { font-size: 1.7em; font-weight: 800; letter-spacing: 3px; font-family: 'Courier New', monospace; background: rgba(255,255,255,0.15); padding: 10px; border-radius: 8px; margin: 6px 0; }
+  .btn-back, .btn-share { border: none; padding: 12px 22px; border-radius: 12px; font-weight: 700; cursor: pointer; font-size: 0.9em; transition: all 0.3s; margin: 6px 4px; }
+  .btn-back { background: linear-gradient(135deg, var(--accent), var(--label)); color: #fff; }
+  .btn-share { background: linear-gradient(135deg, #25d366, #128c7e); color: #fff; }
+  .btn-back:hover, .btn-share:hover { transform: translateY(-2px); }
+
+  .lock-warning { background: rgba(214,48,49,0.12); border: 1px solid rgba(214,48,49,0.4); color: #d63031; padding: 10px 14px; border-radius: 10px; font-size: 0.82em; margin-bottom: 16px; line-height: 1.5; }
+  .lock-warning.hidden { display: none; }
+
+  .confetti { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9998; overflow: hidden; }
+  .confetti-piece { position: absolute; width: 10px; height: 10px; top: -20px; animation: fall linear forwards; }
+  @keyframes fall { to { transform: translateY(110vh) rotate(720deg); opacity: 0; } }
+
+  .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(100px); background: linear-gradient(135deg, #00b894, #00cec9); color: #fff; padding: 14px 24px; border-radius: 12px; font-weight: 600; box-shadow: 0 10px 30px rgba(0,0,0,0.3); opacity: 0; transition: all 0.4s; z-index: 10000; max-width: 90%; text-align: center; font-size: 0.9em; }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  .toast.error { background: linear-gradient(135deg, #d63031, #e17055); }
+  .hidden { display: none !important; }
+
+  @media (max-width: 600px) {
+    header h1 { font-size: 1.3em; }
+    .card { padding: 20px; }
+    .top-controls { top: 12px; right: 12px; }
+    .icon-btn { width: 44px; height: 44px; }
+    .header-logo { width: 70px; height: 70px; }
+  }
+</style>
+</head>
+<body data-theme="default">
+
+<div class="top-controls">
+  <div class="icon-btn" id="themeBtn" title="Ganti Tema">
+    <span id="themeIcon" style="font-size:1.4em;">🎨</span>
+  </div>
+</div>
+
+<div class="container">
+  <header>
+    <img src="https://ar-hosting.pages.dev/f/G5TDCZTGOI2XGN3LK5EUUYTMIJQ5MR46GSNEJWUE2QBJJLI4FE" alt="Logo SMP" class="header-logo">
+    <h1>PLAY BOX</h1>
+    <p class="sub">Request Lagu Favoritmu — Diputar Saat Jam Istirahat</p>
+  </header>
+
+  <div class="card" id="mainCard">
+    <div id="formWrap">
+      <h2>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+        Request Lagu
+        <span class="equalizer"><span></span><span></span><span></span><span></span><span></span></span>
+      </h2>
+
+      <div class="alert">🎵 <strong>1 request per hari!</strong> Request berikutnya bisa dilakukan 24 jam kemudian.</div>
+      <div class="lock-warning hidden" id="lockWarning">⏳ <span id="lockMsg"></span></div>
+      <div class="galau-warning" id="galauWarning">💔 Lagu ini bernuansa sedih/galau. Yakin mau request? Kalau iya, lanjutkan saja.</div>
+
+      <form onsubmit="submitRequest(event)" id="requestForm">
+        <div class="form-group">
+          <label>Judul Lagu</label>
+          <div class="input-row">
+            <input type="text" id="judul" required maxlength="100" placeholder="Klik untuk lihat daftar, atau ketik sendiri" autocomplete="off" onfocus="bukaPanel()" oninput="filterPanel()">
+            <button type="button" class="btn-yt" onclick="cariYouTube()">▶ YouTube</button>
+          </div>
+          <div class="lagu-panel" id="laguPanel"></div>
+        </div>
+        <div class="form-group">
+          <label>Penyanyi</label>
+          <input type="text" id="penyanyi" required maxlength="80" placeholder="Otomatis terisi jika pilih dari daftar">
+        </div>
+        <div class="form-group">
+          <label>Genre</label>
+          <select id="genre" required>
+            <option value="">-- Pilih Genre --</option>
+            <option>Pop</option><option>Religi</option><option>K-Pop</option><option>Barat/English</option>
+            <option>Hip-Hop/Rap</option><option>Reggae</option><option>Akustik</option><option>Galau/Sedih</option>
+            <option>Semangat/Motivasi</option><option>COVID Era</option><option>Lainnya</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Nama Peminta</label>
+          <input type="text" id="nama" required maxlength="60" placeholder="Nama lengkapmu">
+        </div>
+        <div class="form-group">
+          <label>Kelas</label>
+          <input type="text" id="kelas" required maxlength="15" placeholder="Contoh: 8A">
+        </div>
+        <div class="form-group">
+          <label>Alasan <span class="optional">(opsional, max 100 karakter)</span></label>
+          <input type="text" id="alasan" maxlength="100" placeholder="Contoh: buat teman ultah, penutup istirahat, dll">
+        </div>
+        <div class="form-group">
+          <label>Foto Muka <span class="optional">(opsional, untuk verifikasi)</span></label>
+          <div class="foto-box" onclick="document.getElementById('fotoInput').click()">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+            <div style="font-weight: 600; margin-top: 6px;">Klik untuk ambil foto</div>
+            <small>Selfie muka jelas. Watermark nama + kelas otomatis.</small>
+          </div>
+          <input type="file" id="fotoInput" accept="image/*" capture="user" style="display:none" onchange="handleFoto(this)">
+          <div class="foto-preview" id="fotoPreview">
+            <img id="fotoImg" src="" alt="Preview">
+            <button type="button" onclick="hapusFoto()">Hapus Foto</button>
+          </div>
+        </div>
+        <button type="submit" class="btn-submit" id="submitBtn">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          Kirim Request
+        </button>
+      </form>
+    </div>
+
+    <div class="success-page" id="successPage">
+      <div class="success-icon"><svg width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+      <h2>Request Terkirim!</h2>
+      <p>Lagu kamu sudah masuk ke panitia.<br>Tunggu diputar saat istirahat ya! 🎶</p>
+      <div class="kode-box">
+        <div class="label">KODE REQUEST KAMU</div>
+        <div class="kode" id="kodeRequest">-</div>
+        <small>Simpan kode ini untuk menanyakan status ke panitia</small>
+      </div>
+      <button class="btn-share" onclick="shareWA()">📤 Bagikan ke Teman</button>
+      <button class="btn-back" onclick="resetForm()">Tutup</button>
+    </div>
+  </div>
+
+  <p style="text-align:center; margin-top:20px; font-size:0.75em; opacity:0.5;">🎧 Play Box</p>
+</div>
+
+<div class="confetti" id="confetti"></div>
+<div class="toast" id="toast"></div>
+
+<script>
+  // ============================
+  // ⚠️ GANTI 2 BARIS INI ⚠️
+  // ============================
+  const BOT_TOKEN = '8899740910:AAEMDE-9ORA101OtFsvleW8PjbjiNPJ-WxY';
+  const CHAT_ID   = '-1003944678323';
+  // ============================
+
+  // ============ DAFTAR LAGU ============
+  const DAFTAR_LAGU = [
+    { j: "Sephia", p: "Sheila On 7", l: "2000" }, { j: "Ada Apa Denganmu", p: "Peterpan", l: "2003" },
+    { j: "Topeng", p: "Peterpan", l: "2003" }, { j: "Mungkin Nanti", p: "Peterpan", l: "2004" },
+    { j: "Kenangan Terindah", p: "Samsons", l: "2005" }, { j: "Teman Tapi Mesra", p: "Ratu", l: "2005" },
+    { j: "Pupus", p: "Dewa 19", l: "2005" }, { j: "Manusia Bodoh", p: "Ada Band", l: "2004" },
+    { j: "Gantung", p: "Melly Goeslaw", l: "2006" }, { j: "Hapus Aku", p: "Nidji", l: "2006" },
+    { j: "Kasmaran", p: "Pinkan Mambo", l: "2006" }, { j: "Permintaan Hati", p: "Letto", l: "2007" },
+    { j: "Jadikan Aku Yang Kedua", p: "Astrid", l: "2007" }, { j: "Aku Cinta Dia", p: "Gita Gutawa", l: "2009" },
+    { j: "Ruang Rindu", p: "Letto", l: "" }, { j: "Tulus", p: "Radja", l: "" },
+    { j: "Seperti Yang Kau Minta", p: "Chrisye", l: "" }, { j: "Sebuah Kisah Klasik", p: "Sheila On 7", l: "" },
+    { j: "Menanti Sebuah Jawaban", p: "Padi", l: "" }, { j: "Dealova", p: "Once Mekel", l: "" },
+    { j: "Kangen", p: "Kerispatih", l: "" }, { j: "Ku Tak Bisa", p: "Slank", l: "" },
+    { j: "Terlalu Manis", p: "Slank", l: "" }, { j: "Cinta Dalam Hati", p: "Ungu", l: "" },
+    { j: "Disini Untukmu", p: "Ungu", l: "" }, { j: "Saat Kau Pergi", p: "Vagetoz", l: "" },
+    { j: "Posesif", p: "Naif", l: "" }, { j: "Ku Katakan Dengan Indah", p: "Peterpan", l: "" },
+    { j: "Jangan Lupakan", p: "Nidji", l: "" }, { j: "Bukannya Aku Takut", p: "Juliette", l: "" },
+    { j: "Ya Sudahlah", p: "Bondan Prakoso", l: "" }, { j: "Not With Me", p: "Bondan Prakoso", l: "" },
+    { j: "SKJ", p: "ST12", l: "" }, { j: "P.U.S.P.A", p: "ST12", l: "" },
+    { j: "Sahabat Sejati", p: "Sheila On 7", l: "" }, { j: "Sahabat Jadi Cinta", p: "Zigaz", l: "" },
+    { j: "Dewi", p: "Alexa", l: "" }, { j: "Suara", p: "Hijau Daun", l: "" },
+    { j: "Dan", p: "Sheila On 7", l: "" }, { j: "Janci Suci", p: "Yovie & Nuno", l: "" },
+    { j: "Merindukanmu", p: "D'Masiv", l: "" }, { j: "Roman Picisan", p: "Dewa 19", l: "" },
+    { j: "Bukan Pujangga", p: "Basejam", l: "" }, { j: "Mahadewi", p: "Padi", l: "" },
+    { j: "Hampa Hatiku", p: "Ungu", l: "" }, { j: "Jangan Menyerah", p: "D'Masiv", l: "" },
+    { j: "Cari Jodoh", p: "Wali Band", l: "" }, { j: "Separuh Jiwaku Pergi", p: "Anang Hermansyah", l: "" },
+    { j: "Superman", p: "Lucky Laki", l: "" }, { j: "C.I.N.T.A", p: "D'Bagindas", l: "" },
+    { j: "Rasa Ini", p: "Vierra", l: "" }, { j: "Panah Asmara", p: "Afgan Syah Reza", l: "" },
+    { j: "Pemilik Hati", p: "Armada", l: "" }, { j: "Harus Terpisah", p: "Cakra Khan", l: "" },
+    { j: "Separuh Aku", p: "Noah", l: "" }, { j: "Lumpuhkan Ingatanku", p: "Geisha", l: "" },
+    { j: "Hidup Untukmu Mati Tanpamu", p: "Noah", l: "" }, { j: "Selimut Tetangga", p: "Repvblik", l: "" },
+    { j: "Gajah", p: "Tulus", l: "" }, { j: "LDR", p: "Raisa", l: "" },
+    { j: "Lapang Dada", p: "Sheila On 7", l: "" }, { j: "Jatuh Hati", p: "Raisa", l: "" },
+    { j: "Siapkah Kau tuk Jatuh Cinta Lagi", p: "HiVi!", l: "" }, { j: "Tetap dalam Jiwa", p: "Isyana Sarasvati", l: "" },
+    { j: "Kali Kedua", p: "Raisa", l: "" }, { j: "Monokrom", p: "Tulus", l: "" },
+    { j: "Akad", p: "Payung Teduh", l: "" }, { j: "Surat Cinta Untuk Starla", p: "Virgoun", l: "" },
+    { j: "Penantian Berharga", p: "Rizky Febian", l: "" },
+    { j: "Hanya Rindu", p: "Andmesh", l: "COVID" }, { j: "Cinta Karena Cinta", p: "Judika", l: "COVID" },
+    { j: "Lathi", p: "Weird Genius feat. Sara Fajira", l: "COVID" }, { j: "Pura-Pura Lupa", p: "Mahen", l: "COVID" },
+    { j: "Secukupnya", p: "Hindia", l: "COVID" }, { j: "Adaptasi", p: "Tulus", l: "COVID" },
+    { j: "Ampun Bang Jago", p: "Tian Storm x Ever Slkr", l: "COVID" }, { j: "Bertaut", p: "Nadin Amizah", l: "COVID" },
+    { j: "Cuek", p: "Rizky Febian", l: "COVID" }, { j: "Aku Bukan Jodohnya", p: "Tri Suaka", l: "COVID" },
+    { j: "Melawan Restu", p: "Mahalini", l: "COVID" }, { j: "Pesan Terakhir", p: "Lyodra", l: "COVID" },
+    { j: "Runtuh", p: "Feby Putri feat. Fiersa Besari", l: "COVID" }, { j: "Takut", p: "Idgitaf", l: "COVID" },
+    { j: "Sisa Rasa", p: "Mahalini", l: "COVID" }, { j: "Salah Apa Aku (Entah Apa Yang Merasukimu)", p: "ILIR 7", l: "COVID" },
+    { j: "Lily", p: "Alan Walker, K-391 & Emelie Hollow", l: "COVID" },
+    { j: "Hati-Hati di Jalan", p: "Tulus", l: "" }, { j: "Kau Rumahku", p: "Raissa Anggiani", l: "" },
+    { j: "Sial", p: "Mahalini", l: "" }, { j: "Komang", p: "Raim Laode", l: "" },
+    { j: "Tak Segampang Itu", p: "Anggi Marito", l: "" }, { j: "Satu Bulan", p: "Bernadya", l: "2024" },
+    { j: "Penjaga Hati", p: "Nadhif Basalamah", l: "2024" }, { j: "Kata Mereka Ini Berlebihan", p: "Bernadya", l: "2024" },
+    { j: "Untungnya, Hidup Harus Tetap Berjalan", p: "Bernadya", l: "2024" }, { j: "Gala Bunga Matahari", p: "Sal Priadi", l: "2024" },
+    { j: "Mati-matian", p: "Mahalini", l: "2024" }, { j: "Kita Bikin Romantis", p: "Maliq & D'Essentials", l: "2024" },
+    { j: "Sialan", p: "Adrian Khalif, Juicy Luicy", l: "2024" }, { j: "Tak Ingin Usai", p: "Kesya Levronka", l: "2022" },
+    { j: "Ojo Dibandingke", p: "Farel Prayoga", l: "2022" }, { j: "Satru 2", p: "Denny Caknan ft Happy Asmara", l: "2022" },
+    { j: "SANES", p: "GuyonWaton x Denny Caknan", l: "2023" },
+    { j: "Mangu", p: "Fourtwenty feat. Charita Utami", l: "2025" }, { j: "Garam & Madu", p: "Tenxi, Jemsii, Naykilla", l: "2025" },
+    { j: "You'll Be in My Heart", p: "NIKI", l: "2025" }, { j: "Terbuang Dalam Waktu", p: "Barasuara", l: "2025" },
+    { j: "Tabola Bale", p: "Silet Open Up dkk", l: "2025" }, { j: "Alamak", p: "Rizky Febian feat. Adrian Khalif", l: "2025" },
+    { j: "Bunga Maaf", p: "The Lantis", l: "2025" }, { j: "Stecu Stecu", p: "Faris Adam", l: "2025" },
+    { j: "Bila Kau Tak Di Sampingku", p: "Sheila On 7", l: "2025" }, { j: "Soulmate", p: "Kahitna", l: "2025" },
+    { j: "Sesi Potret", p: "eńau feat. Ari Lesmana", l: "2026" }, { j: "Kita Lewati Berdua", p: "Overnight", l: "2026" },
+    { j: "Jatuh Suka", p: "Tulus", l: "2026" }, { j: "Sedia Aku Sebelum Hujan", p: "Idgitaf", l: "2026" },
+    { j: "Bahagia Lagi", p: "Piche Kota", l: "2026" }, { j: "Teh Hijau", p: "Tulus", l: "2026" },
+    { j: "Rabun Jauh", p: "Bernadya", l: "2026" },
+    { j: "APT.", p: "ROSÉ, Bruno Mars", l: "" }, { j: "Golden", p: "HUNTR/X", l: "" },
+    { j: "Who", p: "Jimin", l: "" }, { j: "Don't Say You Love Me", p: "Jin", l: "" },
+    { j: "Like Jennie", p: "Jennie", l: "" }, { j: "Die With A Smile", p: "Lady Gaga, Bruno Mars", l: "" },
+    { j: "Birds of a Feather", p: "Billie Eilish", l: "" }, { j: "Espresso", p: "Sabrina Carpenter", l: "" },
+    { j: "Beautiful Things", p: "Benson Boone", l: "" }, { j: "Lose Control", p: "Teddy Swims", l: "" }
+  ];
+
+  const KATA_GALAU = ['galau', 'sedih', 'putus', 'mantan', 'rindu', 'sakit', 'kecewa', 'hampa', 'pilu', 'tangis', 'cry', 'sad', 'lonely', 'heartbreak', 'broken'];
+  function isGalau(judul) { const j = judul.toLowerCase(); return KATA_GALAU.some(k => j.includes(k)); }
+
+  // ============ PANEL LAGU ============
+  const panel = document.getElementById('laguPanel');
+  const inputJudul = document.getElementById('judul');
+
+  function renderPanel(filter = '') {
+    const q = filter.toLowerCase().trim();
+    const hasil = q ? DAFTAR_LAGU.filter(x => x.j.toLowerCase().includes(q) || x.p.toLowerCase().includes(q)) : DAFTAR_LAGU;
+    if (hasil.length === 0) { panel.innerHTML = '<div class="lagu-empty">Tidak ada lagu yang cocok. Kamu bisa ketik sendiri.</div>'; return; }
+    panel.innerHTML = hasil.map((x) => {
+      const label = x.l ? ` <span style="font-size:0.75em;color:#e17055;font-weight:700;">[${x.l}]</span>` : '';
+      return `<div class="lagu-item" onclick="pilihLagu(${DAFTAR_LAGU.indexOf(x)})"><div class="judul">${escapeHtml(x.j)}${label}</div><div class="penyanyi">${escapeHtml(x.p)}</div></div>`;
+    }).join('');
+  }
+  function bukaPanel() { panel.classList.add('show'); renderPanel(inputJudul.value); }
+  function filterPanel() { panel.classList.add('show'); renderPanel(inputJudul.value); }
+  function pilihLagu(idx) {
+    const lagu = DAFTAR_LAGU[idx]; inputJudul.value = lagu.j; document.getElementById('penyanyi').value = lagu.p; panel.classList.remove('show');
+    const gw = document.getElementById('galauWarning'); if (isGalau(lagu.j)) gw.classList.add('show'); else gw.classList.remove('show');
+  }
+  document.addEventListener('click', (e) => { if (!e.target.closest('#judul') && !e.target.closest('#laguPanel')) panel.classList.remove('show'); });
+  inputJudul.addEventListener('input', () => { const gw = document.getElementById('galauWarning'); if (isGalau(inputJudul.value)) gw.classList.add('show'); else gw.classList.remove('show'); });
+
+  // ============ TEMA ============
+  const TEMAS = [{ id: 'default', icon: '🎨' }, { id: 'neon', icon: '💚' }, { id: 'retro', icon: '📻' }, { id: 'sunset', icon: '🌅' }, { id: 'ocean', icon: '🌊' }, { id: 'forest', icon: '🌲' }, { id: 'candy', icon: '🍬' }, { id: 'midnight', icon: '🌙' }, { id: 'lava', icon: '🌋' }, { id: 'sky', icon: '☁️' }, { id: 'coffee', icon: '☕' }, { id: 'galaxy', icon: '🌌' }, { id: 'sakura', icon: '🌸' }, { id: 'monochrome', icon: '⚫' }, { id: 'cyberpunk', icon: '🤖' }, { id: 'pastel', icon: '🌈' }];
+  let temaIdx = parseInt(localStorage.getItem('pb_tema') || '0'); if (isNaN(temaIdx) || temaIdx >= TEMAS.length) temaIdx = 0;
+  function applyTema() { const t = TEMAS[temaIdx]; document.body.setAttribute('data-theme', t.id); document.getElementById('themeIcon').textContent = t.icon; localStorage.setItem('pb_tema', temaIdx); }
+  applyTema();
+  document.getElementById('themeBtn').addEventListener('click', () => { temaIdx = (temaIdx + 1) % TEMAS.length; applyTema(); showToast('🎨 Tema: ' + TEMAS[temaIdx].id.charAt(0).toUpperCase() + TEMAS[temaIdx].id.slice(1)); });
+
+  // ============ FOTO ============
+  let fotoBlob = null;
+  function handleFoto(input) {
+    const file = input.files[0]; if (!file) return;
+    const reader = new FileReader();
+    reader.onload = e => {
+      const img = new Image();
+      img.onload = () => {
+        const maxDim = 800; let w = img.width, h = img.height;
+        if (w > maxDim || h > maxDim) { if (w > h) { h = Math.round(h * maxDim / w); w = maxDim; } else { w = Math.round(w * maxDim / h); h = maxDim; } }
+        const canvas = document.createElement('canvas'); canvas.width = w; canvas.height = h;
+        const ctx = canvas.getContext('2d'); ctx.drawImage(img, 0, 0, w, h);
+        const nama = document.getElementById('nama').value.trim() || 'Tanpa Nama'; const kelas = document.getElementById('kelas').value.trim() || '-';
+        const waktu = new Date().toLocaleString('id-ID'); const wm = `${nama} (${kelas}) • ${waktu}`;
+        const fontSize = Math.max(12, Math.round(w / 40)); ctx.font = `bold ${fontSize}px 'Segoe UI', sans-serif`;
+        const textW = ctx.measureText(wm).width; const pad = 8;
+        ctx.fillStyle = 'rgba(0,0,0,0.55)'; ctx.fillRect(0, h - fontSize - pad * 2, textW + pad * 2, fontSize + pad * 2);
+        ctx.fillStyle = '#fff'; ctx.fillText(wm, pad, h - pad);
+        canvas.toBlob(blob => {
+          fotoBlob = blob; document.getElementById('fotoImg').src = URL.createObjectURL(blob);
+          document.getElementById('fotoPreview').classList.add('show');
+          showToast('✅ Foto siap (' + Math.round(blob.size/1024) + ' KB)');
+        }, 'image/jpeg', 0.75);
+      }; img.src = e.target.result;
+    }; reader.readAsDataURL(file);
+  }
+  function hapusFoto() { fotoBlob = null; document.getElementById('fotoInput').value = ''; document.getElementById('fotoPreview').classList.remove('show'); document.getElementById('fotoImg').src = ''; }
+
+  // ============ VALIDASI & YT ============
+  document.getElementById('kelas').addEventListener('blur', function() {
+    let v = this.value.trim().toUpperCase(); const roman = { 'VII': 7, 'VIII': 8, 'IX': 9 }; v = v.replace(/\s+/g, '');
+    const m = v.match(/^(VII|VIII|IX)([A-Z])$/); if (m) this.value = roman[m[1]] + m[2]; else this.value = v;
+  });
+  function cariYouTube() { const judul = inputJudul.value.trim(); const penyanyi = document.getElementById('penyanyi').value.trim(); if (!judul) { showToast('Isi judul lagu dulu', true); return; } window.open(`https://www.youtube.com/results?search_query=${encodeURIComponent(`${judul} ${penyanyi}`)}`, '_blank'); }
+
+  // ============ ANTI-SPAM ============
+  function cekLock() {
+    const last = parseInt(localStorage.getItem('pb_last_request') || '0'); const diff = Date.now() - last; const limit = 1 * 1000;  // 1 detik (untuk tes)
+    if (last && diff < limit) {
+      const sisa = limit - diff; const jam = Math.floor(sisa / 3600000); const menit = Math.floor((sisa % 3600000) / 60000); const detik = Math.floor((sisa % 60000) / 1000);
+      document.getElementById('lockWarning').classList.remove('hidden'); document.getElementById('lockMsg').textContent = `Kamu sudah request hari ini. Coba lagi dalam ${jam}j ${menit}m ${detik}d.`;
+      document.getElementById('submitBtn').disabled = true; return false;
+    }
+    document.getElementById('lockWarning').classList.add('hidden'); document.getElementById('submitBtn').disabled = false; return true;
+  }
+  setInterval(cekLock, 1000);
+
+  // ============ FINGERPRINT ============
+  let clientIP = '-'; fetch('https://api.ipify.org?format=json').then(r => r.json()).then(d => { clientIP = d.ip; }).catch(() => { clientIP = 'tidak terdeteksi'; });
+  function getFingerprint() { const nav = navigator, scr = screen; return [nav.userAgent, scr.width + 'x' + scr.height, nav.language, Intl.DateTimeFormat().resolvedOptions().timeZone, nav.hardwareConcurrency || '-', nav.platform || '-'].join(' | '); }
+  function hashFingerprint(str) { let h = 0; for (let i = 0; i < str.length; i++) { h = ((h << 5) - h) + str.charCodeAt(i); h |= 0; } return 'FP' + Math.abs(h).toString(36).toUpperCase(); }
+
+  // ============ TELEGRAM ============
+  async function sendTelegramPhoto(blob, caption) { const form = new FormData(); form.append('chat_id', CHAT_ID); form.append('photo', blob, 'foto.jpg'); form.append('caption', caption); form.append('parse_mode', 'HTML'); const res = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, { method: 'POST', body: form }); return res.json(); }
+  async function sendTelegramText(text) { const res = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ chat_id: CHAT_ID, text, parse_mode: 'HTML', disable_web_page_preview: true }) }); return res.json(); }
+
+  // ============ SUBMIT ============
+  async function submitRequest(e) {
+    e.preventDefault(); if (!cekLock()) { showToast('⏳ Tunggu 24 jam ya!', true); return; }
+    const btn = document.getElementById('submitBtn'); btn.disabled = true; btn.innerHTML = '⏳ Mengirim...';
+    const data = { judul: inputJudul.value.trim(), penyanyi: document.getElementById('penyanyi').value.trim(), genre: document.getElementById('genre').value, nama: document.getElementById('nama').value.trim(), kelas: document.getElementById('kelas').value.trim(), alasan: document.getElementById('alasan').value.trim() };
+    const kode = 'PLB-' + Math.random().toString(36).substring(2, 6).toUpperCase(); const waktu = new Date().toLocaleString('id-ID', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }); const fp = hashFingerprint(getFingerprint());
+
+    const teksPesan = `🎵 <b>REQUEST LAGU BARU</b> 🎵\n━━━━━━━━━━━━━━━━━━\n\n🎧 <b>Judul</b>     : ${escapeHtml(data.judul)}\n🎤 <b>Penyanyi</b>  : ${escapeHtml(data.penyanyi)}\n🎼 <b>Genre</b>     : ${escapeHtml(data.genre)}\n👤 <b>Peminta</b>   : ${escapeHtml(data.nama)} (${escapeHtml(data.kelas)})\n💬 <b>Alasan</b>    : ${data.alasan ? escapeHtml(data.alasan) : '-'}\n\n🆔 <b>Kode</b>      : <code>${kode}</code>\n🕐 <b>Waktu</b>     : ${waktu}\n\n━━━━━━━━━━━━━━━━━━\n🌐 <b>IP</b>       : <code>${clientIP}</code>\n🔑 <b>Fingerprint</b>: <code>${fp}</code>`;
+
+    try {
+      if (fotoBlob) await sendTelegramPhoto(fotoBlob, teksPesan); else await sendTelegramText(teksPesan + '\n\n📷 <i>(Tanpa foto verifikasi)</i>');
+      localStorage.setItem('pb_last_request', Date.now().toString()); localStorage.setItem('pb_last_kode', kode); localStorage.setItem('pb_last_judul', data.judul);
+      document.getElementById('kodeRequest').textContent = kode; document.getElementById('formWrap').classList.add('hidden'); document.getElementById('successPage').classList.add('show');
+      launchConfetti(); showToast('✅ Request berhasil dikirim!');
+    } catch (err) { showToast('❌ Gagal kirim. Cek koneksi / token bot.', true); console.error(err); }
+    finally { btn.disabled = false; btn.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg> Kirim Request'; }
+  }
+
+  function escapeHtml(s) { return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+  function shareWA() { const judul = localStorage.getItem('pb_last_judul') || 'lagu'; const kode = localStorage.getItem('pb_last_kode') || '-'; window.open(`https://wa.me/?text=${encodeURIComponent(`🎵 Aku baru request lagu "${judul}" di Play Box sekolah! Kode: ${kode}\nKamu juga request yuk!`)}`, '_blank'); }
+  function resetForm() { document.getElementById('formWrap').classList.remove('hidden'); document.getElementById('successPage').classList.remove('show'); document.getElementById('requestForm').reset(); hapusFoto(); document.getElementById('galauWarning').classList.remove('show'); panel.classList.remove('show'); cekLock(); }
+
+  // ============ CONFETTI & TOAST ============
+  function launchConfetti() { const container = document.getElementById('confetti'); const colors = ['#667eea','#764ba2','#f093fb','#f5576c','#4facfe','#00f2fe','#43e97b','#fa709a']; for (let i = 0; i < 80; i++) { const p = document.createElement('div'); p.className = 'confetti-piece'; p.style.left = Math.random() * 100 + '%'; p.style.background = colors[Math.floor(Math.random() * colors.length)]; p.style.animationDuration = (2 + Math.random() * 2) + 's'; p.style.animationDelay = Math.random() * 0.5 + 's'; p.style.width = p.style.height = (6 + Math.random() * 8) + 'px'; p.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px'; container.appendChild(p); setTimeout(() => p.remove(), 4500); } }
+  let toastTimer; function showToast(msg, isError = false) { const t = document.getElementById('toast'); t.textContent = msg; t.classList.toggle('error', isError); t.classList.add('show'); clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove('show'), 3000); }
+</script>
+</body>
+</html>
